@@ -12,8 +12,17 @@ We trying to support latest cassandra driver versions as they released.
 
 ## Getting started
 ### Maven
-### Build yourself
+```xml
+<dependency>
+    <groupId>com.pingidentity.oss.cassandra4j</groupId>
+    <artifactId>spring-boot-cassandra-auto-configuration</artifactId>
+    <version>2.1.0</version>
+</dependency>
+```
 
+### Build yourself
+1. clone source
+2. `mvn clean install`
 
 ## Registered beans
 
