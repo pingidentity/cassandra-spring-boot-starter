@@ -11,7 +11,7 @@ If you using spring-boot v2.1.x stick with v2.1.x cassandra starter version. (v1
 We trying to support latest cassandra driver versions as they released.
 
 ## Getting started
-### Maven
+Reference library from maven central:
 ```xml
 <dependency>
     <groupId>com.pingidentity.oss.cassandra4j</groupId>
@@ -20,14 +20,13 @@ We trying to support latest cassandra driver versions as they released.
 </dependency>
 ```
 
-### Minimal configuration
 For cassandra running on localhost add following to your spring-boot `application.properties`:
 ```Java Properties
 cassandra.contact-points=127.0.0.1
-cassandra.keyspaceName=my_app_keyspace
+cassandra.keyspace-name=my_app_keyspace
 ```
 
-### Get session and query data
+Inject driver session and query data:
 ```Java
 @Autowired
 private Session session;
