@@ -24,7 +24,7 @@ We trying to support latest cassandra driver versions as they released.
 For cassandra running on localhost add following to your spring-boot `application.properties`:
 ```Java Properties
 cassandra.contact-points=127.0.0.1
-cassandra.keyspaceName=my\_app\_keyspace
+cassandra.keyspaceName=my_app_keyspace
 ```
 
 ### Get session and query data
@@ -32,8 +32,10 @@ cassandra.keyspaceName=my\_app\_keyspace
 @Autowired
 private Session session;
 
-.............
+// somewhere in the code
+
 ResultSet rs = session.execute("select release_version from system.local");
+
 // work your magic
 
 ```
