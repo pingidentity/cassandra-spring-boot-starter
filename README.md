@@ -20,15 +20,36 @@ We trying to support latest cassandra driver versions as they released.
 </dependency>
 ```
 
-### Build yourself
-1. clone source
-2. `mvn clean install`
+### Minimal configuration
+For cassandra running on localhost add following to your spring-boot `application.properties`:
+```Java Properties
+cassandra.contact-points=127.0.0.1
+cassandra.keyspaceName=my\_app\_keyspace
+```
+
+### Get session and query data
+```Java
+@Autowired
+private Session session;
+
+.............
+ResultSet rs = session.execute("select release_version from system.local");
+// work your magic
+
+```
 
 ## Registered beans
+Auto configration makes following beans avaliable for autowiring anywhere:
+
+- `cluster` (com.datastax.driver.core.Cluster), fully initialized instance, singleton
+- `session` (com.datastax.driver.core.Session), connected session, ready to execute queries, singleton
+- `mappingManager` (com.datastax.driver.mapping.MappingManager), object mapper associated with session
 
 ## Auto-binding of mappers & accessors
 
 ## Configuration
+
+## Customizing 
 
 ## Docs & Examples
 
