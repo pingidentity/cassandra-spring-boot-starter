@@ -108,7 +108,7 @@ public class CassandraAutoConfiguration implements BeanDefinitionRegistryPostPro
 
     @ConditionalOnMissingBean
     @ConditionalOnProperty("cassandra.contact-points")
-    @Bean("mapperFactory")
+    @Bean(DATASTAX_MAPPER_FACTORY_BEAN)
     public MapperFactory mapperFactory(MappingManager manager)
     {
         return new MapperFactory(manager);

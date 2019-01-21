@@ -48,7 +48,7 @@ Auto configration makes following beans avaliable for autowiring anywhere:
 
 ## Auto-binding of mappers & accessors
 Cassandra auto configuration provides special support for datastax ObjectMapper.
-When enabled it can discover and automatically provide and register bean mappers and accessors with spring context.
+When enabled it can discover and automatically register bean mappers and accessors with spring context.
 
 First, let configuration know where your pojo and accessors resides: 
 
@@ -78,6 +78,8 @@ private VideoQueries videoQueries;
 ```		
 
 ## Health check
+Cassandra auto configuration provides spring-boot HealthIndicator with id `cassandra` for probing cluster connection.
+Automatically enabled when spring-boot-starter-actuator dependency is present. Can be controlled normal way with `management.health.cassandra.enabled` property.
 
 ## Configuration
 
