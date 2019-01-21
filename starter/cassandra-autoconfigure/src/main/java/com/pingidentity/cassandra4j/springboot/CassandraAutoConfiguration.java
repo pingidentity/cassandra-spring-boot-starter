@@ -93,7 +93,7 @@ import static com.pingidentity.cassandra4j.springboot.utils.StringUtils.split;
 @EnableConfigurationProperties(CassandraProperties.class)
 public class CassandraAutoConfiguration implements BeanDefinitionRegistryPostProcessor, EnvironmentAware
 {
-    public static final String DATASTAX_MAPPER_FACTORY_BEAN = "mapperFactory";
+    public static final String DATASTAX_MAPPER_FACTORY_BEAN = "datastaxMapperFactory";
 
     private Environment env;
     private List<ConfigurationCustomizer> customizers;

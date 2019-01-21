@@ -1,6 +1,6 @@
 # Cassandra spring-boot starter
 Provides pure cassandra datastax driver spring-boot autoconfiguration with optional health check.
-Easy cassandra getting started expirience without spring-data complexity or if you prefer to be closer to driver level.
+Easy cassandra getting started experience without spring-data complexity or if you prefer to be closer to driver level.
 Declarative configuration for all supported datastax driver options and automatic spring bindings for mappers and query accessors.
 
 
@@ -42,11 +42,42 @@ ResultSet rs = session.execute("select release_version from system.local");
 ## Registered beans
 Auto configration makes following beans avaliable for autowiring anywhere:
 
-- `cluster` (com.datastax.driver.core.Cluster), fully initialized instance, singleton
-- `session` (com.datastax.driver.core.Session), connected session, ready to execute queries, singleton
-- `mappingManager` (com.datastax.driver.mapping.MappingManager), object mapper associated with session
+- `cluster` (com.datastax.driver.core.Cluster), fully initialized instance, singleton.
+- `session` (com.datastax.driver.core.Session), connected session, ready to execute queries, singleton.
+- `mappingManager` (com.datastax.driver.mapping.MappingManager), object mapper associated with session.
 
 ## Auto-binding of mappers & accessors
+Cassandra auto configuration provides special support for datastax ObjectMapper.
+When enabled it can discover and automatically provide and register bean mappers and accessors with spring context.
+
+First, let configuration know where your pojo and accessors resides: 
+
+```Java Properties
+cassandra.scan-packages=io.gitub.yourapp.model
+```
+
+Auto configuration will look for `@Table` and `@Accessor` annotated classes:
+
+```Java
+@Table
+public class Video {...}
+
+@Accessor
+public interface VideoQueries {...}
+```
+
+and register corresponding `Mapper<Video>` and `VideoQueries` implementations with spring. 
+Those can be simply injected and used in your code with no extra coding:
+
+```Java
+@Autowired
+private Mapper<Video> videoMapper;
+
+@Autowired
+private VideoQueries videoQueries;
+```		
+
+## Health check
 
 ## Configuration
 
