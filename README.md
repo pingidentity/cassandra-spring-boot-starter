@@ -86,4 +86,8 @@ Automatically enabled when spring-boot-starter-actuator dependency is present. C
 ## Customizing 
 
 ## Docs & Examples
+There is full blown microservice example under [example/](example) folder. It implements small
+REST API backed by cassandra auto configuration. 
+
+Clone folder and launch it locally with `mvn clean spring-boot:run` or explore sources.
 
