@@ -78,7 +78,7 @@ private VideoQueries videoQueries;
 ```		
 
 ## Health check
-Cassandra auto configuration provides spring-boot HealthIndicator with id `cassandra` for probing cluster connection.
+Cassandra auto configuration provides spring-boot health indicator with id `cassandra` for probing cluster connection.
 Automatically enabled when spring-boot-starter-actuator dependency is present. Can be controlled normal way with `management.health.cassandra.enabled` property.
 
 ## Configuration
@@ -86,7 +86,7 @@ Automatically enabled when spring-boot-starter-actuator dependency is present. C
 ## Customizing 
 
 ## Docs & Examples
-There is full blown microservice example under [example/](example) folder. It implements small
+There is full blown microservice example under [example](example) folder. It implements small
 REST API backed by cassandra auto configuration. 
 
 Clone folder and launch it locally with `mvn clean spring-boot:run` or explore sources.
