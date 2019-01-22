@@ -82,6 +82,16 @@ Cassandra auto configuration provides spring-boot health indicator with id `cass
 Automatically enabled when spring-boot-starter-actuator dependency is present. Can be controlled normal way with `management.health.cassandra.enabled` property.
 
 ## Configuration
+| Property      | Description   | Default value |
+| ------------- | ------------- | ------------- |
+| contactPoints | Comma separated list of initial contact points (ip addresses or host names)             |
+| clusterName     | optional name of the cluster  |
+| keyspaceName    | Content Cell  |
+| port            | Content Cell  |
+| protocolVersion  | Content Cell  |
+| compression   | Content Cell  |
+| auth.username | Content Cell  |
+| auth.password | Content Cell  |
 
 ## Customizing 
 When properties is not enough cassandra auto configuration provides a way for programmatic customization of cluster configuration.
