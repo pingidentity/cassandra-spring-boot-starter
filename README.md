@@ -83,6 +83,21 @@ Automatically enabled when spring-boot-starter-actuator dependency is present. C
 
 ## Configuration
 
+### Connection info
+`cassandra.contact-points` - required. Comma separated list of initial contact points (ip addresses or host names) 
+`cassandra.keyspace-name` - Required. Keyspace name to use for connecting session. 
+`cassandra.cluster-name` -  Optional name of the cluster.  |
+`cassandra.port` - Port to connect to (9042 if ommited)
+`cassandra.protocol-version` - Native protocol version to use (1 to 5) (auto discovery will be used when ommited)
+
+### Compression
+`cassandra.compression` Transport compression. Supported options *NONE* | *SNAPPY* | *LZ4*
+
+### Authentication
+`cassandra.auth.username` - Username to connect to cassandra host.
+`cassandra.auth.password` - Password to connect to cassandra host.
+
+Please see Customizing section if you want to use custom `AuthProvider`.
 
 | Property      | Description   | Comments |
 | ------------- | ------------- | ------------- |
@@ -97,7 +112,8 @@ Automatically enabled when spring-boot-starter-actuator dependency is present. C
 | load-balancing-policy | Load balancing policy to use with a cluster (DC_AWARE \| ROUND_ROBIN) |
 | dcaware.local-dc | name of the "local" datacenter | load-balancing-policy == DC_AWARE |
 | dcaware.used-hosts-per-remote-dc | Number of hosts per remote datacenter to consider. | load-balancing-policy == DC_AWARE |
-| dcaware.allow-remote-d-cs-for-local-consistency-level | Allows the policy to return remote hosts for query plans with LOCAL_* consistency levels | load-balancing-policy == DC_AWARE
+| dcaware.allow-remote-dcs-for-local-consistency-level | Allows the policy to return remote hosts for query plans with LOCAL_* consistency levels | load-balancing-policy == DC_AWARE
+| tokenAwarePolicyEnabled | Use token awarness with load balancing policy
 
 ## Customizing 
 When properties is not enough cassandra auto configuration provides a way for programmatic customization of cluster configuration.

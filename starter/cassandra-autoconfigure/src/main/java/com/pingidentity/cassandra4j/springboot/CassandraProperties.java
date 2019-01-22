@@ -19,6 +19,8 @@
 package com.pingidentity.cassandra4j.springboot;
 
 import com.datastax.driver.core.ProtocolOptions;
+import com.datastax.driver.core.policies.TokenAwarePolicy;
+import com.datastax.driver.core.policies.TokenAwarePolicy.ReplicaOrdering;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties("cassandra")
@@ -38,7 +40,7 @@ public class CassandraProperties
     private LoadBalancingPolicies loadBalancingPolicy;
     private DcAwarePolicy dcaware;
     private LatencyAwarePolicy latencyaware;
-    private boolean tokenAwarePolicyEnabled;
+    private TokenAwarePolicy tokenaware;
     private SocketOptions socket;
     private PoolOptions pool;
     private RetryPolicyOptions retry;
@@ -390,7 +392,7 @@ public class CassandraProperties
     {
         private String localDc;
         private int usedHostsPerRemoteDc;
-        private boolean allowRemoteDCsForLocalConsistencyLevel;
+        private boolean allowRemoteDcsForLocalConsistencyLevel;
 
         public String getLocalDc()
         {
@@ -412,14 +414,40 @@ public class CassandraProperties
             this.usedHostsPerRemoteDc = usedHostsPerRemoteDc;
         }
 
-        public boolean isAllowRemoteDCsForLocalConsistencyLevel()
+        public boolean isAllowRemoteDcsForLocalConsistencyLevel()
         {
-            return allowRemoteDCsForLocalConsistencyLevel;
+            return allowRemoteDcsForLocalConsistencyLevel;
         }
 
-        public void setAllowRemoteDCsForLocalConsistencyLevel(boolean allowRemoteDCsForLocalConsistencyLevel)
+        public void setAllowRemoteDcsForLocalConsistencyLevel(boolean allowRemoteDcsForLocalConsistencyLevel)
         {
-            this.allowRemoteDCsForLocalConsistencyLevel = allowRemoteDCsForLocalConsistencyLevel;
+            this.allowRemoteDcsForLocalConsistencyLevel = allowRemoteDcsForLocalConsistencyLevel;
+        }
+    }
+
+    public static class TokenAwarePolicy
+    {
+        private boolean enabled;
+        private ReplicaOrdering replicaOrdering = ReplicaOrdering.RANDOM;
+
+        public boolean isEnabled()
+        {
+            return enabled;
+        }
+
+        public void setEnabled(boolean enabled)
+        {
+            this.enabled = enabled;
+        }
+
+        public ReplicaOrdering getReplicaOrdering()
+        {
+            return replicaOrdering;
+        }
+
+        public void setReplicaOrdering(ReplicaOrdering replicaOrdering)
+        {
+            this.replicaOrdering = replicaOrdering;
         }
     }
 
@@ -582,14 +610,14 @@ public class CassandraProperties
         this.latencyaware = latencyaware;
     }
 
-    public boolean isTokenAwarePolicyEnabled()
+    public TokenAwarePolicy getTokenaware()
     {
-        return tokenAwarePolicyEnabled;
+        return tokenaware;
     }
 
-    public void setTokenAwarePolicyEnabled(boolean tokenAwarePolicyEnabled)
+    public void setTokenaware(TokenAwarePolicy tokenaware)
     {
-        this.tokenAwarePolicyEnabled = tokenAwarePolicyEnabled;
+        this.tokenaware = tokenaware;
     }
 
     public SocketOptions getSocket()

@@ -166,7 +166,7 @@ public class CassandraAutoConfiguration implements BeanDefinitionRegistryPostPro
                     .withLocalDc(props.getDcaware().getLocalDc())
                     .withUsedHostsPerRemoteDc(props.getDcaware().getUsedHostsPerRemoteDc());
 
-            if (props.getDcaware().isAllowRemoteDCsForLocalConsistencyLevel())
+            if (props.getDcaware().isAllowRemoteDcsForLocalConsistencyLevel())
             {
                 dcBuilder.allowRemoteDCsForLocalConsistencyLevel();
             }
@@ -192,9 +192,9 @@ public class CassandraAutoConfiguration implements BeanDefinitionRegistryPostPro
                         .withUpdateRate(props.getLatencyaware().getUpdateRate(), TimeUnit.MILLISECONDS)
                         .build();
             }
-            else if (props.isTokenAwarePolicyEnabled())
+            else if (props.getTokenaware() !=null && props.getTokenaware().isEnabled())
             {
-                loadBalancingPolicy = new TokenAwarePolicy(loadBalancingPolicy);
+                loadBalancingPolicy = new TokenAwarePolicy(loadBalancingPolicy, props.getTokenaware().getReplicaOrdering());
             }
         }
 
