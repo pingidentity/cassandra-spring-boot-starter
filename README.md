@@ -146,6 +146,20 @@ Please see Customizing section if you want to use custom `AuthProvider`.
 `cassandra.latencyaware.exclusion-threshold` - exclusion threshold.  
 `cassandra.latencyaware.update-rate` - update rate in ms.  
 
+
+### Query retries options
+`cassandra.retry.policy` - retry policy, supported options: *DEFAULT* | *FALLTHROUGH*. 
+`cassandra.retry.logging-enabled` - enable retry decision logging. 
+
+
+### Reconnection options
+`cassandra.reconnection.policy` - reconnection policy, supported options *CONSTANT* | *EXPONENTIAL*.  
+
+`cassandra.reconnection.constant-delay` - delay between reconnection attempts in ms for *CONSTANT* policy.  
+
+`cassandra.reconnection.exponential-base-delay` - base delay in ms for *EXPONENTIAL* policy.  
+`cassandra.reconnection.exponential-max-delay` - max delay in ms for *EXPONENTIAL* policy.  
+
 ## Customizing 
 When properties is not enough cassandra auto configuration provides a way for programmatic customization of cluster configuration.
 

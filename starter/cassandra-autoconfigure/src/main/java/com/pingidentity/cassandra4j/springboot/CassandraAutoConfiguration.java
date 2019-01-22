@@ -260,10 +260,6 @@ public class CassandraAutoConfiguration implements BeanDefinitionRegistryPostPro
             {
                 retryPolicy = DefaultRetryPolicy.INSTANCE;
             }
-            else if (RetryPolicies.DOWNGRADING_CONSISTENCY.equals(props.getRetry().getPolicy()))
-            {
-                retryPolicy = DowngradingConsistencyRetryPolicy.INSTANCE;
-            }
             else if (RetryPolicies.FALLTHROUGH.equals(props.getRetry().getPolicy()))
             {
                 retryPolicy = FallthroughRetryPolicy.INSTANCE;

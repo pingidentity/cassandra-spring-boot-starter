@@ -27,7 +27,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class CassandraProperties
 {
     public enum LoadBalancingPolicies { DC_AWARE, ROUND_ROBIN }
-    public enum RetryPolicies { DEFAULT, DOWNGRADING_CONSISTENCY, FALLTHROUGH }
+    public enum RetryPolicies { DEFAULT, FALLTHROUGH }
     public enum ReconnectionPolicies { CONSTANT, EXPONENTIAL }
 
     private String clusterName;
