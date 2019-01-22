@@ -92,7 +92,29 @@ Automatically enabled when spring-boot-starter-actuator dependency is present. C
 
 
 ### Socket options
+`cassandra.socket.connect-timeout` - connection timeout in ms.  
+`cassandra.socket.keep-alive` - TCP connection keep alive.  
+`cassandra.socket.read-timeout` - per host read timeout in ms.  
+`cassandra.socket.receive-buffer-size` - size of incoming network IO buffer in bytes.  
+`cassandra.socket.send-buffer-size` - size of outgoing network IO buffer in bytes.  
+`cassandra.socket.so-linger` - linger-on-close timeout.  
+`cassandra.socket.reuse-address` - whether to enable address reuse.  
+`cassandra.socket.tcp-no-delay` - TCP no delay (Nagle).  
 
+### Connection pooling options
+`cassandra.pool.heartbeat-interval-seconds` - heartbeat interval in seconds.  
+`cassandra.pool.idle-timeout-seconds` - idle connection timeout in seconds.  
+`cassandra.pool.pool-timeout-millis` - timeout for acquiring connection from pool in ms.  
+
+`cassandra.pool.local.core-connections-per-host` - initial number of connections to each "local" host.  
+`cassandra.pool.local.max-connections-per-host` - max number of connections to each "local" host.  
+`cassandra.pool.local.max-requests-per-connection` - max number of requests per connections to "local" host.  
+`cassandra.pool.local.new-connection-threshold` - threshold to trigger new connection to "local" host.  
+
+`cassandra.pool.remote.core-connections-per-host` - initial number of connections to each "remote" host.  
+`cassandra.pool.remote.max-connections-per-host` - max number of connections to each "remote" host.  
+`cassandra.pool.remote.max-requests-per-connection` - max number of requests per connections to "remote" host.  
+`cassandra.pool.remote.new-connection-threshold` - threshold to trigger new connection to "remote" host.  
 
 ### Compression
 `cassandra.compression` Transport compression. Supported options *NONE* | *SNAPPY* | *LZ4*
