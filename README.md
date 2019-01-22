@@ -84,25 +84,35 @@ Automatically enabled when spring-boot-starter-actuator dependency is present. C
 ## Configuration
 
 ### Connection info
-`cassandra.contact-points` - required. Comma separated list of initial contact points (ip addresses or host names) 
-
-`cassandra.keyspace-name` - Required. Keyspace name to use for connecting session. 
-
-`cassandra.cluster-name` -  Optional name of the cluster.  |
-
-`cassandra.port` - Port to connect to (9042 if ommited)
-
-`cassandra.protocol-version` - Native protocol version to use (1 to 5) (auto discovery will be used when ommited)
+`cassandra.contact-points` - required. Comma separated list of initial contact points (ip addresses or host names)  
+`cassandra.keyspace-name` - Required. Keyspace name to use for connecting session.  
+`cassandra.cluster-name` -  Optional name of the cluster.  
+`cassandra.port` - Port to connect to (9042 if ommited).   
+`cassandra.protocol-version` - Native protocol version to use (1 to 5) (auto discovery will be used when ommited).  
 
 ### Compression
 `cassandra.compression` Transport compression. Supported options *NONE* | *SNAPPY* | *LZ4*
 
 ### Authentication
-`cassandra.auth.username` - Username to connect to cassandra host.
-
-`cassandra.auth.password` - Password to connect to cassandra host.
+`cassandra.auth.username` - Username to connect to cassandra host.  
+`cassandra.auth.password` - Password to connect to cassandra host.  
 
 Please see Customizing section if you want to use custom `AuthProvider`.
+
+### Load balancing 
+`cassandra.load-balancing-policy` - Load balancing policy to use with a cluster.  
+Supported options: 
+ - *ROUND_ROBIN* - for round robin load balancing.
+ - *DC_AWARE* for datacenter aware round robin load balancing. 
+
+#### Datacenter aware load balancing
+`cassandra.dcaware.local-dc` - name of the "local" datacenter.  
+`cassandra.dcaware.used-hosts-per-remote-dc` - Number of hosts per remote datacenter to consider.  
+`cassandra.dcaware.allow-remote-dcs-for-local-consistency-level` - Allows the policy to return remote hosts for query plans with LOCAL_* consistency levels.  
+
+#### Token aware load balancing
+`cassandra.tokenaware.enabled` - set to true to use token awarness for primary load balancing policy
+`cassandra.tokenaware.replicaOrdering` - replica ordering strategy (*TOPOLOGICAL* | *RANDOM* | *NEUTRAL*) (RANDOM when ommited).  
 
 | Property      | Description   | Comments |
 | ------------- | ------------- | ------------- |
