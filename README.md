@@ -85,6 +85,7 @@ Automatically enabled when spring-boot-starter-actuator dependency is present. C
 
 ## Customizing 
 When properties is not enough cassandra auto configuration provides a way for programmatic customization of cluster configuration.
+
 Define a bean that implements `com.pingidentity.cassandra4j.CassandraConfigurationCustomizer` in your spring context
 and it will be called with fully initialized instance of `Cluster`. 
 
@@ -96,11 +97,11 @@ public CassandraConfigurationCustomizer codecCustomizer()
 {
     return cluster ->
     {
-		//custom enum codec
+        //custom enum codec
         cluster.getConfiguration().getCodecRegistry().register(new EnumNameCodec<>(Video.Genre.class));
-		
-		//codec to handle java.time.Instant type
-		cluster.getConfiguration().getCodecRegistry().register(InstantCodec.instance);
+        
+        //codec to handle java.time.Instant type
+        cluster.getConfiguration().getCodecRegistry().register(InstantCodec.instance);
 
         return cluster;
     };
