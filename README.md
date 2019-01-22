@@ -84,14 +84,14 @@ Automatically enabled when spring-boot-starter-actuator dependency is present. C
 ## Configuration
 | Property      | Description   | Default value |
 | ------------- | ------------- | ------------- |
-| contactPoints | Comma separated list of initial contact points (ip addresses or host names)             |
-| clusterName     | optional name of the cluster  |
-| keyspaceName    | Content Cell  |
-| port            | Content Cell  |
-| protocolVersion  | Content Cell  |
-| compression   | Content Cell  |
-| auth.username | Content Cell  |
-| auth.password | Content Cell  |
+| contact-points  | Required. Comma separated list of initial contact points (ip addresses or host names)   |
+| keyspace-name    | Required. Keyspace name to use for connecting session.  |
+| cluster-name     | Optional name of the cluster.  |
+| port            | Port to connect to.  | 9042 |
+| protocol-version  | Native protocol version to use (1 to 5)  |
+| compression   | Transport compression (NONE | SNAPPY | LZ4)  |
+| auth.username | Username to connect to cassandra host  |
+| auth.password | Password to connect to cassandra host  |
 
 ## Customizing 
 When properties is not enough cassandra auto configuration provides a way for programmatic customization of cluster configuration.
