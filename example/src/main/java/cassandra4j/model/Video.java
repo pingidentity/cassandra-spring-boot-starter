@@ -6,11 +6,14 @@ import com.datastax.driver.mapping.annotations.Table;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
+import java.util.Set;
 import java.util.UUID;
 
 @Table(name="videos")
 public class Video
 {
+    public enum Genre { thriller, drama, comedy, horror, crime, romance, animation, documentary, biography }
+
     @PartitionKey(0)
     @Column(name="video_id")
     private UUID videoId;
@@ -27,6 +30,9 @@ public class Video
 
     @Column(name="release_year")
     private int year;
+
+    @Column(name="genres")
+    private Set<Genre> genres;
 
     public UUID getVideoId()
     {
@@ -76,5 +82,15 @@ public class Video
     public void setYear(int year)
     {
         this.year = year;
+    }
+
+    public Set<Genre> getGenres()
+    {
+        return genres;
+    }
+
+    public void setGenres(Set<Genre> genres)
+    {
+        this.genres = genres;
     }
 }

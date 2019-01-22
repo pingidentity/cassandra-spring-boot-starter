@@ -13,10 +13,11 @@ Feed some data:
 where video.json is something like:
 ```JSON
 {
-	"title": "Molly's Game",
-	"description": "The true story of Molly Bloom, an Olympic-class skier who ran the world's most exclusive high-stakes poker game and became an FBI target.",
-	"date": "2017/01/05",
-	"year": 2017	
+    "title": "Molly's Game",
+    "description": "The true story of Molly Bloom, an Olympic-class skier who ran the world's most exclusive high-stakes poker game and became an FBI target.",
+    "date": "2017/01/05",
+    "year": 2017,
+    "genres": ["biography", "crime", "drama"]
 }
 ```
 

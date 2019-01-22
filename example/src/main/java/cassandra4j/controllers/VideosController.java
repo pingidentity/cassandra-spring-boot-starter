@@ -36,7 +36,7 @@ public class VideosController
     }
 
     @PostMapping
-    public Video createVideo(@RequestBody  Video video)
+    public Video createVideo(@RequestBody Video video)
     {
         video.setVideoId(UUID.randomUUID());
 

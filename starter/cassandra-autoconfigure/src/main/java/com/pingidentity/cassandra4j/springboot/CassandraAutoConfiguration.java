@@ -49,7 +49,7 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.pingidentity.cassandra4j.ConfigurationCustomizer;
+import com.pingidentity.cassandra4j.CassandraConfigurationCustomizer;
 import com.pingidentity.cassandra4j.springboot.CassandraProperties.ReconnectionPolicies;
 import com.pingidentity.cassandra4j.springboot.CassandraProperties.RetryPolicies;
 import com.pingidentity.cassandra4j.springboot.health.CassandraHealthIndicator;
@@ -96,7 +96,7 @@ public class CassandraAutoConfiguration implements BeanDefinitionRegistryPostPro
     public static final String DATASTAX_MAPPER_FACTORY_BEAN = "datastaxMapperFactory";
 
     private Environment env;
-    private List<ConfigurationCustomizer> customizers;
+    private List<CassandraConfigurationCustomizer> customizers;
 
     @ConditionalOnMissingBean
     @ConditionalOnProperty("cassandra.contact-points")
@@ -125,7 +125,7 @@ public class CassandraAutoConfiguration implements BeanDefinitionRegistryPostPro
     @ConditionalOnMissingBean
     @ConditionalOnProperty("cassandra.contact-points")
     @Bean(destroyMethod = "close")
-    public Cluster cluster(CassandraProperties props, ObjectProvider<List<ConfigurationCustomizer>> customizersProvider)
+    public Cluster cluster(CassandraProperties props, ObjectProvider<List<CassandraConfigurationCustomizer>> customizersProvider)
     {
         customizers = customizersProvider.getIfAvailable();
 
@@ -329,7 +329,7 @@ public class CassandraAutoConfiguration implements BeanDefinitionRegistryPostPro
 
         if (customizers != null)
         {
-            for (ConfigurationCustomizer customizer : customizers)
+            for (CassandraConfigurationCustomizer customizer : customizers)
             {
                 result = customizer.customize(cluster);
             }
@@ -341,7 +341,7 @@ public class CassandraAutoConfiguration implements BeanDefinitionRegistryPostPro
     @ConditionalOnClass(JmxReporter.class)
     @ConditionalOnMissingBean(name="jmxReporter")
     @Bean
-    public ConfigurationCustomizer jmxReporterCustomizer(CassandraProperties props)
+    public CassandraConfigurationCustomizer jmxReporterCustomizer(CassandraProperties props)
     {
         return cluster ->
         {

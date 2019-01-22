@@ -8,6 +8,7 @@ CREATE TABLE videos (
     description text,
     release_date timestamp,
     release_year int,
+    genres set<text>,
 
     PRIMARY KEY(video_id)
 );

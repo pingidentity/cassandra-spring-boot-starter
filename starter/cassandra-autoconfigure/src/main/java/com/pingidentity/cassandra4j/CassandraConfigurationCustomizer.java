@@ -20,7 +20,7 @@ package com.pingidentity.cassandra4j;
 
 import com.datastax.driver.core.Cluster;
 
-public interface ConfigurationCustomizer
+public interface CassandraConfigurationCustomizer
 {
     Cluster customize(Cluster cluster);
 }
