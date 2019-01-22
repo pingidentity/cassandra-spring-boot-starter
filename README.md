@@ -90,6 +90,10 @@ Automatically enabled when spring-boot-starter-actuator dependency is present. C
 `cassandra.port` - Port to connect to (9042 if ommited).   
 `cassandra.protocol-version` - Native protocol version to use (1 to 5) (auto discovery will be used when ommited).  
 
+
+### Socket options
+
+
 ### Compression
 `cassandra.compression` Transport compression. Supported options *NONE* | *SNAPPY* | *LZ4*
 
@@ -100,8 +104,7 @@ Automatically enabled when spring-boot-starter-actuator dependency is present. C
 Please see Customizing section if you want to use custom `AuthProvider`.
 
 ### Load balancing 
-`cassandra.load-balancing-policy` - Load balancing policy to use with a cluster.  
-Supported options: 
+`cassandra.load-balancing-policy` - Load balancing policy to use with a cluster. Supported options: 
  - *ROUND_ROBIN* - for round robin load balancing.
  - *DC_AWARE* for datacenter aware round robin load balancing. 
 
@@ -112,23 +115,14 @@ Supported options:
 
 #### Token aware load balancing
 `cassandra.tokenaware.enabled` - set to true to use token awarness for primary load balancing policy
-`cassandra.tokenaware.replicaOrdering` - replica ordering strategy (*TOPOLOGICAL* | *RANDOM* | *NEUTRAL*) (RANDOM when ommited).  
+`cassandra.tokenaware.replica-ordering` - replica ordering strategy (*TOPOLOGICAL* | *RANDOM* | *NEUTRAL*) (RANDOM when ommited).  
 
-| Property      | Description   | Comments |
-| ------------- | ------------- | ------------- |
-| contact-points  | Required. Comma separated list of initial contact points (ip addresses or host names)   |
-| keyspace-name    | Required. Keyspace name to use for connecting session.  |
-| cluster-name     | Optional name of the cluster.  |
-| port            | Port to connect to.  | 9042 if not provided |
-| protocol-version  | Native protocol version to use (1 to 5) | 
-| compression   | Transport compression (NONE \| SNAPPY \| LZ4)  |
-| auth.username | Username to connect to cassandra host  |
-| auth.password | Password to connect to cassandra host  |
-| load-balancing-policy | Load balancing policy to use with a cluster (DC_AWARE \| ROUND_ROBIN) |
-| dcaware.local-dc | name of the "local" datacenter | load-balancing-policy == DC_AWARE |
-| dcaware.used-hosts-per-remote-dc | Number of hosts per remote datacenter to consider. | load-balancing-policy == DC_AWARE |
-| dcaware.allow-remote-dcs-for-local-consistency-level | Allows the policy to return remote hosts for query plans with LOCAL_* consistency levels | load-balancing-policy == DC_AWARE
-| tokenAwarePolicyEnabled | Use token awarness with load balancing policy
+#### Latency aware load balancing
+`cassandra.latencyaware.scale` - scale in ms.  
+`cassandra.latencyaware.retry-period` - retry period in ms.  
+`cassandra.latencyaware.minimum-measurements` - minimum number of measurements per-host to consider.  
+`cassandra.latencyaware.exclusion-threshold` - exclusion threshold.  
+`cassandra.latencyaware.update-rate` - update rate in ms.  
 
 ## Customizing 
 When properties is not enough cassandra auto configuration provides a way for programmatic customization of cluster configuration.
