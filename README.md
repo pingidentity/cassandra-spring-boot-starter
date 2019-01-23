@@ -170,8 +170,8 @@ Please see Customizing section if you want to use custom `AuthProvider`.
 ## Customizing 
 When properties is not enough cassandra auto configuration provides a way for programmatic customization of cluster configuration.
 There are two customization interfaces avaliable:
- - `com.pingidentity.cassandra4j.CassandraConfigurationCustomizer` called before cluster instance is constructed and initialized, `Cluster.Builder` instance passed as argumet after all declarative configuration was applied.
- - `com.pingidentity.cassandra4j.CassandraPostConfigurationCustomizer called right after cluster instance is constructed. Fully initialized & connected `Cluster` instance is passed as argument.
+ - `com.pingidentity.cassandra4j.CassandraConfigurationCustomizer` called before cluster instance is constructed and initialized, `Cluster.Builder` instance passed as argumet after all declarative configuration was applied.  
+ - `com.pingidentity.cassandra4j.CassandraPostConfigurationCustomizer` called right after cluster instance is constructed. Fully initialized & connected `Cluster` instance is passed as argument.  
  
 Define a corresponding beans that implements interfaces above in your spring context and they will be automatically applied.
 
