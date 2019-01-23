@@ -160,13 +160,32 @@ Please see Customizing section if you want to use custom `AuthProvider`.
 `cassandra.reconnection.exponential-base-delay` - base delay in ms for *EXPONENTIAL* policy.  
 `cassandra.reconnection.exponential-max-delay` - max delay in ms for *EXPONENTIAL* policy.  
 
+
+### Query options
+
+### Metrics options
+`cassandra.metrics-enabled` - enables/disables metrics collection for cluster, enabled by default.  
+`cassandra.jmx-reporting-enabled` - enables/disables metrics reporting over JMX, enabled by default.
+
 ## Customizing 
 When properties is not enough cassandra auto configuration provides a way for programmatic customization of cluster configuration.
+There are two customization interfaces avaliable:
+ - `com.pingidentity.cassandra4j.CassandraConfigurationCustomizer` called before cluster instance is constructed and initialized, `Cluster.Builder` instance passed as argumet after all declarative configuration was applied.
+ - `com.pingidentity.cassandra4j.CassandraPostConfigurationCustomizer called right after cluster instance is constructed. Fully initialized & connected `Cluster` instance is passed as argument.
+ 
+Define a corresponding beans that implements interfaces above in your spring context and they will be automatically applied.
 
-Define a bean that implements `com.pingidentity.cassandra4j.CassandraConfigurationCustomizer` in your spring context
-and it will be called with fully initialized instance of `Cluster`. 
+For instance if you want custom address translator or auth provider you'd go with `CassandraConfigurationCustomizer`:
 
-For instance if you want to register extra codecs for your application:
+```Java
+@Bean
+public CassandraConfigurationCustomizer authCustomizer()
+{
+    return builder -> builder.withAuthProvider(new GSSAPIAuthProvider());
+}
+```
+
+If you want to register extra codecs for your application your choice is `CassandraPostConfigurationCustomizer`:
 
 ```Java
 @Bean
@@ -185,7 +204,7 @@ public CassandraConfigurationCustomizer codecCustomizer()
 }
 ```
 
-You can define several customizers in your application as well. 
+You can define several customizers beans of both types in your application as well, they will be applied in order.
 
 ## Docs & Examples
 There is full blown microservice example under [example](example) folder. It implements small

@@ -30,7 +30,6 @@ import com.datastax.driver.core.SocketOptions;
 import com.datastax.driver.core.policies.ConstantReconnectionPolicy;
 import com.datastax.driver.core.policies.DCAwareRoundRobinPolicy;
 import com.datastax.driver.core.policies.DefaultRetryPolicy;
-import com.datastax.driver.core.policies.DowngradingConsistencyRetryPolicy;
 import com.datastax.driver.core.policies.ExponentialReconnectionPolicy;
 import com.datastax.driver.core.policies.FallthroughRetryPolicy;
 import com.datastax.driver.core.policies.LatencyAwarePolicy;
@@ -50,6 +49,7 @@ import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.pingidentity.cassandra4j.CassandraConfigurationCustomizer;
+import com.pingidentity.cassandra4j.CassandraPostConfigurationCustomizer;
 import com.pingidentity.cassandra4j.springboot.CassandraProperties.ReconnectionPolicies;
 import com.pingidentity.cassandra4j.springboot.CassandraProperties.RetryPolicies;
 import com.pingidentity.cassandra4j.springboot.health.CassandraHealthIndicator;
@@ -96,6 +96,7 @@ public class CassandraAutoConfiguration implements BeanDefinitionRegistryPostPro
     public static final String DATASTAX_MAPPER_FACTORY_BEAN = "datastaxMapperFactory";
 
     private Environment env;
+    private List<CassandraPostConfigurationCustomizer> postCustomizers;
     private List<CassandraConfigurationCustomizer> customizers;
 
     @ConditionalOnMissingBean
@@ -125,8 +126,11 @@ public class CassandraAutoConfiguration implements BeanDefinitionRegistryPostPro
     @ConditionalOnMissingBean
     @ConditionalOnProperty("cassandra.contact-points")
     @Bean(destroyMethod = "close")
-    public Cluster cluster(CassandraProperties props, ObjectProvider<List<CassandraConfigurationCustomizer>> customizersProvider)
+    public Cluster cluster(CassandraProperties props,
+                           ObjectProvider<List<CassandraPostConfigurationCustomizer>> postCustomizersProvider,
+                           ObjectProvider<List<CassandraConfigurationCustomizer>> customizersProvider)
     {
+        postCustomizers = postCustomizersProvider.getIfAvailable();
         customizers = customizersProvider.getIfAvailable();
 
         Cluster.Builder builder = Cluster.builder()
@@ -313,19 +317,35 @@ public class CassandraAutoConfiguration implements BeanDefinitionRegistryPostPro
         // we providing customizer bean for post configuration if enabled later
         builder.withoutJMXReporting();
 
-        Cluster cluster = builder.build().init();
+        //apply custom client side customizations & init cluster
+        Cluster cluster = customize(builder).build().init();
 
-        //apply custom client side customizations
-        return customize(cluster);
+        //post init customization
+        return postCustomize(cluster);
     }
 
-    private Cluster customize(Cluster cluster)
+    private Cluster.Builder customize(Cluster.Builder builder)
     {
-        Cluster result = cluster;
+        Cluster.Builder result = builder;
 
         if (customizers != null)
         {
             for (CassandraConfigurationCustomizer customizer : customizers)
+            {
+                result = customizer.customize(builder);
+            }
+        }
+
+        return result;
+    }
+
+    private Cluster postCustomize(Cluster cluster)
+    {
+        Cluster result = cluster;
+
+        if (postCustomizers != null)
+        {
+            for (CassandraPostConfigurationCustomizer customizer : postCustomizers)
             {
                 result = customizer.customize(cluster);
             }
@@ -337,7 +357,7 @@ public class CassandraAutoConfiguration implements BeanDefinitionRegistryPostPro
     @ConditionalOnClass(JmxReporter.class)
     @ConditionalOnMissingBean(name="jmxReporter")
     @Bean
-    public CassandraConfigurationCustomizer jmxReporterCustomizer(CassandraProperties props)
+    public CassandraPostConfigurationCustomizer jmxReporterCustomizer(CassandraProperties props)
     {
         return cluster ->
         {
@@ -386,8 +406,8 @@ public class CassandraAutoConfiguration implements BeanDefinitionRegistryPostPro
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException
     {
-        String[] packagesToScan = split(env.getProperty("cassandra.scanPackages"));
-        String[] contactPoints = split(env.getProperty("cassandra.contact-points"));
+        String[] packagesToScan = split(property(env, "cassandra.scanPackages", "cassandra.scan-packages"));
+        String[] contactPoints = split(property(env, "cassandra.contactPoints", "cassandra.contact-points"));
 
         if(contactPoints.length == 0)
         {
@@ -471,6 +491,21 @@ public class CassandraAutoConfiguration implements BeanDefinitionRegistryPostPro
         {
             throw new BeanCreationException("Unable to auto register datastax mapper/accessor beans", e);
         }
+    }
+
+    private String property(Environment env, String ... candidates)
+    {
+        for (String name: candidates)
+        {
+            String value = env.getProperty(name);
+
+            if (value != null)
+            {
+                return value;
+            }
+        }
+
+        return null;
     }
 
     @Override

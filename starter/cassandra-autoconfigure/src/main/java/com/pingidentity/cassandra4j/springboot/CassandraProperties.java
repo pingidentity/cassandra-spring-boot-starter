@@ -35,6 +35,8 @@ public class CassandraProperties
     private String[] contactPoints;
     private Integer port;
     private Integer protocolVersion;
+    private boolean allowBetaProtocolVersion;
+    private Integer maxSchemaAgreementWaitSeconds;
     private ProtocolOptions.Compression compression;
     private Auth auth;
     private LoadBalancingPolicies loadBalancingPolicy;
