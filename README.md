@@ -207,8 +207,8 @@ public CassandraConfigurationCustomizer codecCustomizer()
 You can define several customizers beans of both types in your application as well, they will be applied in order.
 
 ## Docs & Examples
-There is full blown microservice example under [example](example) folder. It implements small
+Full blown microservice example can be found under [example](example) folder. It implements small
 REST API backed by cassandra auto configuration. 
 
-Clone folder and launch it locally with `mvn clean spring-boot:run` or explore sources.
+Refer to corresponding README for information how to run it.
 

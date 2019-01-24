@@ -19,22 +19,32 @@
 package com.pingidentity.cassandra4j.springboot;
 
 import com.codahale.metrics.jmx.JmxReporter;
+import com.datastax.driver.core.AtomicMonotonicTimestampGenerator;
 import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.ConsistencyLevel;
+import com.datastax.driver.core.ClusterWidePercentileTracker;
 import com.datastax.driver.core.HostDistance;
+import com.datastax.driver.core.PerHostPercentileTracker;
+import com.datastax.driver.core.PercentileTracker;
 import com.datastax.driver.core.PoolingOptions;
 import com.datastax.driver.core.ProtocolVersion;
 import com.datastax.driver.core.QueryOptions;
+import com.datastax.driver.core.ServerSideTimestampGenerator;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.SocketOptions;
+import com.datastax.driver.core.ThreadLocalMonotonicTimestampGenerator;
 import com.datastax.driver.core.policies.ConstantReconnectionPolicy;
+import com.datastax.driver.core.policies.ConstantSpeculativeExecutionPolicy;
 import com.datastax.driver.core.policies.DCAwareRoundRobinPolicy;
 import com.datastax.driver.core.policies.DefaultRetryPolicy;
+import com.datastax.driver.core.policies.EC2MultiRegionAddressTranslator;
 import com.datastax.driver.core.policies.ExponentialReconnectionPolicy;
 import com.datastax.driver.core.policies.FallthroughRetryPolicy;
+import com.datastax.driver.core.policies.IdentityTranslator;
 import com.datastax.driver.core.policies.LatencyAwarePolicy;
 import com.datastax.driver.core.policies.LoadBalancingPolicy;
 import com.datastax.driver.core.policies.LoggingRetryPolicy;
+import com.datastax.driver.core.policies.NoSpeculativeExecutionPolicy;
+import com.datastax.driver.core.policies.PercentileSpeculativeExecutionPolicy;
 import com.datastax.driver.core.policies.ReconnectionPolicy;
 import com.datastax.driver.core.policies.RetryPolicy;
 import com.datastax.driver.core.policies.RoundRobinPolicy;
@@ -84,6 +94,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import static com.pingidentity.cassandra4j.springboot.CassandraProperties.AddressTranslator.EC2;
+import static com.pingidentity.cassandra4j.springboot.CassandraProperties.AddressTranslator.IDENTITY;
+import static com.pingidentity.cassandra4j.springboot.CassandraProperties.SpeculativeExecution.CONSTANT;
+import static com.pingidentity.cassandra4j.springboot.CassandraProperties.SpeculativeExecution.NONE;
+import static com.pingidentity.cassandra4j.springboot.CassandraProperties.SpeculativeExecution.PERCENTILE;
+import static com.pingidentity.cassandra4j.springboot.CassandraProperties.TimestampGenerator.ATOMIC;
+import static com.pingidentity.cassandra4j.springboot.CassandraProperties.TimestampGenerator.SERVER_SIDE;
+import static com.pingidentity.cassandra4j.springboot.CassandraProperties.TimestampGenerator.THREAD_LOCAL;
 import static com.pingidentity.cassandra4j.springboot.utils.StringUtils.decapitalize;
 import static com.pingidentity.cassandra4j.springboot.utils.StringUtils.simpleClassName;
 import static com.pingidentity.cassandra4j.springboot.utils.StringUtils.split;
@@ -156,9 +174,125 @@ public class CassandraAutoConfiguration implements BeanDefinitionRegistryPostPro
             builder.withCompression(props.getCompression());
         }
 
-        if(props.getAuth()!=null)
+        if (props.getAuth() != null)
         {
-            builder.withCredentials(props.getAuth().getUsername(),props.getAuth().getPassword());
+            builder.withCredentials(props.getAuth().getUsername(), props.getAuth().getPassword());
+        }
+
+        if (props.isAllowBetaProtocolVersion())
+        {
+            builder.allowBetaProtocolVersion();
+        }
+
+        if (props.isSsl())
+        {
+            builder.withSSL();
+        }
+
+        if (props.isNoCompact())
+        {
+            builder.withNoCompact();
+        }
+
+        if (props.getMaxSchemaAgreementWaitSeconds() != null)
+        {
+            builder.withMaxSchemaAgreementWaitSeconds(props.getMaxSchemaAgreementWaitSeconds());
+        }
+
+        if (props.getTimestampGenerator() != null)
+        {
+            if (ATOMIC.equals(props.getTimestampGenerator()))
+            {
+                AtomicMonotonicTimestampGenerator atomic = props.getAtomic() != null
+                        ? new AtomicMonotonicTimestampGenerator(props.getAtomic().getWarningThresholdSec(), TimeUnit.SECONDS, props.getAtomic().getWarningIntervalSec(), TimeUnit.SECONDS)
+                        : new AtomicMonotonicTimestampGenerator();
+
+                builder.withTimestampGenerator(atomic);
+            }
+
+            else if(SERVER_SIDE.equals(props.getTimestampGenerator()))
+            {
+                builder.withTimestampGenerator(ServerSideTimestampGenerator.INSTANCE);
+            }
+
+            else if(THREAD_LOCAL.equals(props.getTimestampGenerator()))
+            {
+                ThreadLocalMonotonicTimestampGenerator threadLocal = props.getThreadLocal() != null
+                        ? new ThreadLocalMonotonicTimestampGenerator(props.getThreadLocal().getWarningThresholdSec(), TimeUnit.SECONDS, props.getThreadLocal().getWarningIntervalSec(), TimeUnit.SECONDS)
+                        : new ThreadLocalMonotonicTimestampGenerator();
+
+                builder.withTimestampGenerator(threadLocal);
+            }
+        }
+
+        // Address translator configuration
+        if (props.getAddressTranslator() != null)
+        {
+            if (IDENTITY.equals(props.getAddressTranslator()))
+            {
+                builder.withAddressTranslator(new IdentityTranslator());
+            }
+            else if (EC2.equals(props.getAddressTranslator()))
+            {
+                builder.withAddressTranslator(new EC2MultiRegionAddressTranslator());
+            }
+        }
+
+        // Speculative query execution
+        if (props.getSpeculativeExecution() != null)
+        {
+            if (NONE.equals(props.getSpeculativeExecution()))
+            {
+                builder.withSpeculativeExecutionPolicy(NoSpeculativeExecutionPolicy.INSTANCE);
+            }
+            else if (CONSTANT.equals(props.getSpeculativeExecution()))
+            {
+                if (props.getConstantExecution() != null)
+                {
+                    ConstantSpeculativeExecutionPolicy constant =
+                            new ConstantSpeculativeExecutionPolicy(props.getConstantExecution().getConstantDelayMillis(),
+                                                                   props.getConstantExecution().getMaxSpeculativeExecutions());
+                    builder.withSpeculativeExecutionPolicy(constant);
+                }
+            }
+            else if (PERCENTILE.equals(props.getSpeculativeExecution()))
+            {
+                if(props.getPercentileExecution()!=null)
+                {
+                    PercentileTracker tracker = null;
+
+                    if(props.getPercentileExecution().getClusterWide() !=null)
+                    {
+                        CassandraProperties.PrecentileTracker clusterWide = props.getPercentileExecution().getClusterWide();
+
+                        tracker = ClusterWidePercentileTracker.builder(clusterWide.getHighestTrackableLatencyMs())
+                                    .withInterval(clusterWide.getIntervalMs(), TimeUnit.MILLISECONDS)
+                                    .withMinRecordedValues(clusterWide.getMinRecordedValues())
+                                    .withNumberOfSignificantValueDigits(clusterWide.getNumberOfSignificantValueDigits())
+                                    .build();
+                    }
+
+                    if(props.getPercentileExecution().getPerHost() != null)
+                    {
+                        CassandraProperties.PrecentileTracker perHost = props.getPercentileExecution().getPerHost();
+
+                        tracker = PerHostPercentileTracker.builder(perHost.getHighestTrackableLatencyMs())
+                                .withInterval(perHost.getIntervalMs(), TimeUnit.MILLISECONDS)
+                                .withMinRecordedValues(perHost.getMinRecordedValues())
+                                .withNumberOfSignificantValueDigits(perHost.getNumberOfSignificantValueDigits())
+                                .build();
+                    }
+
+                    if(tracker!=null)
+                    {
+                        PercentileSpeculativeExecutionPolicy percentile =
+                                new PercentileSpeculativeExecutionPolicy(tracker,
+                                                                         props.getPercentileExecution().getPercentile(),
+                                                                         props.getPercentileExecution().getMaxSpeculativeExecutions());
+                        builder.withSpeculativeExecutionPolicy(percentile);
+                    }
+                }
+            }
         }
 
         LoadBalancingPolicy loadBalancingPolicy = null;
@@ -298,12 +432,64 @@ public class CassandraAutoConfiguration implements BeanDefinitionRegistryPostPro
         }
         if (props.getQuery() != null)
         {
-            QueryOptions queryOptions = new QueryOptions()
-                    .setConsistencyLevel(ConsistencyLevel.valueOf(props.getQuery().getConsistencyLevel()))
-                    .setSerialConsistencyLevel(ConsistencyLevel.valueOf(props.getQuery().getSerialConsistencyLevel()))
-                    .setFetchSize(props.getQuery().getFetchSize());
+            CassandraProperties.QueryPolicyOptions query = props.getQuery();
 
-            builder.withQueryOptions(queryOptions);
+            QueryOptions options = new QueryOptions();
+
+            if (query.getConsistencyLevel() != null)
+            {
+                options.setConsistencyLevel(query.getConsistencyLevel());
+            }
+            if (query.getSerialConsistencyLevel() != null)
+            {
+                options.setSerialConsistencyLevel(query.getSerialConsistencyLevel());
+            }
+            if (query.getFetchSize() != null)
+            {
+                options.setFetchSize(query.getFetchSize());
+            }
+            if (query.getDefaultIdempotence() != null)
+            {
+                options.setDefaultIdempotence(query.getDefaultIdempotence());
+            }
+            if (query.getPrepareOnAllHosts() != null)
+            {
+                options.setPrepareOnAllHosts(query.getPrepareOnAllHosts());
+            }
+            if (query.getReprepareOnUp() != null)
+            {
+                options.setReprepareOnUp(query.getReprepareOnUp());
+            }
+            if (query.getMetadataEnabled() != null)
+            {
+                options.setMetadataEnabled(query.getMetadataEnabled());
+            }
+            if (query.getRefreshSchemaIntervalMs() != null)
+            {
+                options.setRefreshSchemaIntervalMillis(query.getRefreshSchemaIntervalMs());
+            }
+            if (query.getMaxPendingRefreshSchemaRequests() != null)
+            {
+                options.setMaxPendingRefreshSchemaRequests(query.getMaxPendingRefreshSchemaRequests());
+            }
+            if (query.getRefreshNodeListIntervalMs() != null)
+            {
+                options.setRefreshNodeListIntervalMillis(query.getRefreshNodeListIntervalMs());
+            }
+            if (query.getMaxPendingRefreshNodeListRequests() != null)
+            {
+                options.setMaxPendingRefreshNodeListRequests(query.getMaxPendingRefreshNodeListRequests());
+            }
+            if (query.getRefreshNodeIntervalMs() != null)
+            {
+                options.setRefreshNodeIntervalMillis(query.getRefreshNodeIntervalMs());
+            }
+            if (query.getMaxPendingRefreshNodeRequests() != null)
+            {
+                options.setMaxPendingRefreshNodeRequests(query.getMaxPendingRefreshNodeRequests());
+            }
+
+            builder.withQueryOptions(options);
         }
 
         // Enabled by default.

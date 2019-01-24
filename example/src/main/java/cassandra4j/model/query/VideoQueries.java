@@ -9,6 +9,6 @@ import com.datastax.driver.mapping.annotations.Query;
 @Accessor
 public interface VideoQueries
 {
-    @Query("select video_id, release_year, title, description, release_date from videos where release_year >= :start and release_year < :end")
+    @Query("select video_id, release_year, title, description, release_date, genres from videos where release_year >= :start and release_year < :end")
     Result<Video> findVideosByYear(@Param("start") int startYear, @Param("end") int endYear);
 }

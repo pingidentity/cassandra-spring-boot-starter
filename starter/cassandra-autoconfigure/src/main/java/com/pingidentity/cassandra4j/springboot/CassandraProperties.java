@@ -18,8 +18,8 @@
 
 package com.pingidentity.cassandra4j.springboot;
 
+import com.datastax.driver.core.ConsistencyLevel;
 import com.datastax.driver.core.ProtocolOptions;
-import com.datastax.driver.core.policies.TokenAwarePolicy;
 import com.datastax.driver.core.policies.TokenAwarePolicy.ReplicaOrdering;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -30,13 +30,30 @@ public class CassandraProperties
     public enum RetryPolicies { DEFAULT, FALLTHROUGH }
     public enum ReconnectionPolicies { CONSTANT, EXPONENTIAL }
 
+    //NEW
+    public enum AddressTranslator { IDENTITY, EC2 }
+    public enum TimestampGenerator { SERVER_SIDE, ATOMIC, THREAD_LOCAL }
+    public enum SpeculativeExecution { NONE, CONSTANT, PERCENTILE}
+
     private String clusterName;
     private String keyspaceName;
     private String[] contactPoints;
     private Integer port;
     private Integer protocolVersion;
+
+    //NEW
     private boolean allowBetaProtocolVersion;
+    private boolean ssl;
+    private boolean noCompact;
     private Integer maxSchemaAgreementWaitSeconds;
+    private TimestampGenerator timestampGenerator;
+    private Generator atomic;
+    private Generator threadLocal;
+    private AddressTranslator addressTranslator;
+    private SpeculativeExecution speculativeExecution;
+    private ConstantExecution constantExecution;
+    private PercentileExecution percentileExecution;
+
     private ProtocolOptions.Compression compression;
     private Auth auth;
     private LoadBalancingPolicies loadBalancingPolicy;
@@ -51,6 +68,32 @@ public class CassandraProperties
     private boolean metricsEnabled=true;
     private boolean jmxReportingEnabled=true;
     private String scanPackages;
+
+    public static class Generator
+    {
+        private  long warningThresholdSec;
+        private long warningIntervalSec;
+
+        public long getWarningThresholdSec()
+        {
+            return warningThresholdSec;
+        }
+
+        public void setWarningThresholdSec(long warningThresholdSec)
+        {
+            this.warningThresholdSec = warningThresholdSec;
+        }
+
+        public long getWarningIntervalSec()
+        {
+            return warningIntervalSec;
+        }
+
+        public void setWarningIntervalSec(long warningIntervalSec)
+        {
+            this.warningIntervalSec = warningIntervalSec;
+        }
+    }
 
     public static class Auth
     {
@@ -80,38 +123,150 @@ public class CassandraProperties
 
     public static class QueryPolicyOptions
     {
-        private String consistencyLevel;
-        private String serialConsistencyLevel;
-        private int fetchSize;
+        private ConsistencyLevel consistencyLevel;
+        private ConsistencyLevel serialConsistencyLevel;
+        private Integer fetchSize;
 
-        public String getConsistencyLevel()
+        //new
+        private Boolean defaultIdempotence;
+        private Boolean prepareOnAllHosts;
+        private Boolean reprepareOnUp;
+        private Boolean metadataEnabled;
+        private Integer refreshSchemaIntervalMs;
+        private Integer maxPendingRefreshSchemaRequests;
+        private Integer refreshNodeListIntervalMs;
+        private Integer maxPendingRefreshNodeListRequests;
+        private Integer refreshNodeIntervalMs;
+        private Integer maxPendingRefreshNodeRequests;
+
+        public ConsistencyLevel getConsistencyLevel()
         {
             return consistencyLevel;
         }
 
-        public void setConsistencyLevel(String consistencyLevel)
+        public void setConsistencyLevel(ConsistencyLevel consistencyLevel)
         {
             this.consistencyLevel = consistencyLevel;
         }
 
-        public String getSerialConsistencyLevel()
+        public ConsistencyLevel getSerialConsistencyLevel()
         {
             return serialConsistencyLevel;
         }
 
-        public void setSerialConsistencyLevel(String serialConsistencyLevel)
+        public void setSerialConsistencyLevel(ConsistencyLevel serialConsistencyLevel)
         {
             this.serialConsistencyLevel = serialConsistencyLevel;
         }
 
-        public int getFetchSize()
+        public Integer getFetchSize()
         {
             return fetchSize;
         }
 
-        public void setFetchSize(int fetchSize)
+        public void setFetchSize(Integer fetchSize)
         {
             this.fetchSize = fetchSize;
+        }
+
+        public Boolean getDefaultIdempotence()
+        {
+            return defaultIdempotence;
+        }
+
+        public void setDefaultIdempotence(Boolean defaultIdempotence)
+        {
+            this.defaultIdempotence = defaultIdempotence;
+        }
+
+        public Boolean getPrepareOnAllHosts()
+        {
+            return prepareOnAllHosts;
+        }
+
+        public void setPrepareOnAllHosts(Boolean prepareOnAllHosts)
+        {
+            this.prepareOnAllHosts = prepareOnAllHosts;
+        }
+
+        public Boolean getReprepareOnUp()
+        {
+            return reprepareOnUp;
+        }
+
+        public void setReprepareOnUp(Boolean reprepareOnUp)
+        {
+            this.reprepareOnUp = reprepareOnUp;
+        }
+
+        public Boolean getMetadataEnabled()
+        {
+            return metadataEnabled;
+        }
+
+        public void setMetadataEnabled(Boolean metadataEnabled)
+        {
+            this.metadataEnabled = metadataEnabled;
+        }
+
+        public Integer getRefreshSchemaIntervalMs()
+        {
+            return refreshSchemaIntervalMs;
+        }
+
+        public void setRefreshSchemaIntervalMs(Integer refreshSchemaIntervalMs)
+        {
+            this.refreshSchemaIntervalMs = refreshSchemaIntervalMs;
+        }
+
+        public Integer getMaxPendingRefreshSchemaRequests()
+        {
+            return maxPendingRefreshSchemaRequests;
+        }
+
+        public void setMaxPendingRefreshSchemaRequests(Integer maxPendingRefreshSchemaRequests)
+        {
+            this.maxPendingRefreshSchemaRequests = maxPendingRefreshSchemaRequests;
+        }
+
+        public Integer getRefreshNodeListIntervalMs()
+        {
+            return refreshNodeListIntervalMs;
+        }
+
+        public void setRefreshNodeListIntervalMs(Integer refreshNodeListIntervalMs)
+        {
+            this.refreshNodeListIntervalMs = refreshNodeListIntervalMs;
+        }
+
+        public Integer getMaxPendingRefreshNodeListRequests()
+        {
+            return maxPendingRefreshNodeListRequests;
+        }
+
+        public void setMaxPendingRefreshNodeListRequests(Integer maxPendingRefreshNodeListRequests)
+        {
+            this.maxPendingRefreshNodeListRequests = maxPendingRefreshNodeListRequests;
+        }
+
+        public Integer getRefreshNodeIntervalMs()
+        {
+            return refreshNodeIntervalMs;
+        }
+
+        public void setRefreshNodeIntervalMs(Integer refreshNodeIntervalMs)
+        {
+            this.refreshNodeIntervalMs = refreshNodeIntervalMs;
+        }
+
+        public Integer getMaxPendingRefreshNodeRequests()
+        {
+            return maxPendingRefreshNodeRequests;
+        }
+
+        public void setMaxPendingRefreshNodeRequests(Integer maxPendingRefreshNodeRequests)
+        {
+            this.maxPendingRefreshNodeRequests = maxPendingRefreshNodeRequests;
         }
     }
 
@@ -387,6 +542,128 @@ public class CassandraProperties
         public void setSendBufferSize(int sendBufferSize)
         {
             this.sendBufferSize = sendBufferSize;
+        }
+    }
+
+    public static class ConstantExecution
+    {
+        private long constantDelayMillis;
+        private int maxSpeculativeExecutions;
+
+        public long getConstantDelayMillis()
+        {
+            return constantDelayMillis;
+        }
+
+        public void setConstantDelayMillis(long constantDelayMillis)
+        {
+            this.constantDelayMillis = constantDelayMillis;
+        }
+
+        public int getMaxSpeculativeExecutions()
+        {
+            return maxSpeculativeExecutions;
+        }
+
+        public void setMaxSpeculativeExecutions(int maxSpeculativeExecutions)
+        {
+            this.maxSpeculativeExecutions = maxSpeculativeExecutions;
+        }
+    }
+
+    public static class PercentileExecution
+    {
+        private double percentile;
+        private int maxSpeculativeExecutions;
+        private PrecentileTracker clusterWide;
+        private PrecentileTracker perHost;
+
+        public double getPercentile()
+        {
+            return percentile;
+        }
+
+        public void setPercentile(double percentile)
+        {
+            this.percentile = percentile;
+        }
+
+        public int getMaxSpeculativeExecutions()
+        {
+            return maxSpeculativeExecutions;
+        }
+
+        public void setMaxSpeculativeExecutions(int maxSpeculativeExecutions)
+        {
+            this.maxSpeculativeExecutions = maxSpeculativeExecutions;
+        }
+
+        public PrecentileTracker getClusterWide()
+        {
+            return clusterWide;
+        }
+
+        public void setClusterWide(PrecentileTracker clusterWide)
+        {
+            this.clusterWide = clusterWide;
+        }
+
+        public PrecentileTracker getPerHost()
+        {
+            return perHost;
+        }
+
+        public void setPerHost(PrecentileTracker perHost)
+        {
+            this.perHost = perHost;
+        }
+    }
+
+    public static class PrecentileTracker
+    {
+        private long highestTrackableLatencyMs;
+        private int numberOfSignificantValueDigits;
+        private int minRecordedValues;
+        private long intervalMs;
+
+        public long getHighestTrackableLatencyMs()
+        {
+            return highestTrackableLatencyMs;
+        }
+
+        public void setHighestTrackableLatencyMs(long highestTrackableLatencyMs)
+        {
+            this.highestTrackableLatencyMs = highestTrackableLatencyMs;
+        }
+
+        public int getNumberOfSignificantValueDigits()
+        {
+            return numberOfSignificantValueDigits;
+        }
+
+        public void setNumberOfSignificantValueDigits(int numberOfSignificantValueDigits)
+        {
+            this.numberOfSignificantValueDigits = numberOfSignificantValueDigits;
+        }
+
+        public int getMinRecordedValues()
+        {
+            return minRecordedValues;
+        }
+
+        public void setMinRecordedValues(int minRecordedValues)
+        {
+            this.minRecordedValues = minRecordedValues;
+        }
+
+        public long getIntervalMs()
+        {
+            return intervalMs;
+        }
+
+        public void setIntervalMs(long intervalMs)
+        {
+            this.intervalMs = intervalMs;
         }
     }
 
@@ -700,5 +977,115 @@ public class CassandraProperties
     public void setScanPackages(String scanPackages)
     {
         this.scanPackages = scanPackages;
+    }
+
+    public boolean isAllowBetaProtocolVersion()
+    {
+        return allowBetaProtocolVersion;
+    }
+
+    public void setAllowBetaProtocolVersion(boolean allowBetaProtocolVersion)
+    {
+        this.allowBetaProtocolVersion = allowBetaProtocolVersion;
+    }
+
+    public boolean isSsl()
+    {
+        return ssl;
+    }
+
+    public void setSsl(boolean ssl)
+    {
+        this.ssl = ssl;
+    }
+
+    public boolean isNoCompact()
+    {
+        return noCompact;
+    }
+
+    public void setNoCompact(boolean noCompact)
+    {
+        this.noCompact = noCompact;
+    }
+
+    public Integer getMaxSchemaAgreementWaitSeconds()
+    {
+        return maxSchemaAgreementWaitSeconds;
+    }
+
+    public void setMaxSchemaAgreementWaitSeconds(Integer maxSchemaAgreementWaitSeconds)
+    {
+        this.maxSchemaAgreementWaitSeconds = maxSchemaAgreementWaitSeconds;
+    }
+
+    public TimestampGenerator getTimestampGenerator()
+    {
+        return timestampGenerator;
+    }
+
+    public void setTimestampGenerator(TimestampGenerator timestampGenerator)
+    {
+        this.timestampGenerator = timestampGenerator;
+    }
+
+    public AddressTranslator getAddressTranslator()
+    {
+        return addressTranslator;
+    }
+
+    public void setAddressTranslator(AddressTranslator addressTranslator)
+    {
+        this.addressTranslator = addressTranslator;
+    }
+
+    public SpeculativeExecution getSpeculativeExecution()
+    {
+        return speculativeExecution;
+    }
+
+    public void setSpeculativeExecution(SpeculativeExecution speculativeExecution)
+    {
+        this.speculativeExecution = speculativeExecution;
+    }
+
+    public ConstantExecution getConstantExecution()
+    {
+        return constantExecution;
+    }
+
+    public void setConstantExecution(ConstantExecution constantExecution)
+    {
+        this.constantExecution = constantExecution;
+    }
+
+    public PercentileExecution getPercentileExecution()
+    {
+        return percentileExecution;
+    }
+
+    public void setPercentileExecution(PercentileExecution percentileExecution)
+    {
+        this.percentileExecution = percentileExecution;
+    }
+
+    public Generator getAtomic()
+    {
+        return atomic;
+    }
+
+    public void setAtomic(Generator atomic)
+    {
+        this.atomic = atomic;
+    }
+
+    public Generator getThreadLocal()
+    {
+        return threadLocal;
+    }
+
+    public void setThreadLocal(Generator threadLocal)
+    {
+        this.threadLocal = threadLocal;
     }
 }
