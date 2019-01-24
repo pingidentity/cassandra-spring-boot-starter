@@ -167,6 +167,9 @@ Please see Customizing section if you want to use custom `AuthProvider`.
 `cassandra.metrics-enabled` - enables/disables metrics collection for cluster, enabled by default.  
 `cassandra.jmx-reporting-enabled` - enables/disables metrics reporting over JMX, enabled by default.
 
+### Misc options
+`cassandra.scan-packages` - comma separated list of package to scan for mappers and accessors. See [auto binding section](#auto-binding-of-mappers--accessors) for detailed information.
+
 ## Customizing 
 When properties is not enough cassandra auto configuration provides a way for programmatic customization of cluster configuration.
 There are two customization interfaces avaliable:
