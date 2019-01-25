@@ -177,7 +177,26 @@ Please see Customizing section if you want to use custom `AuthProvider`.
 `cassandra.thread-local.warning-threshold-sec` - timestamps drift allowed before a warning in seconds for *THREAD_LOCAL* generator.  
 
 ### Speculative execution options
+`cassandra.speculative-execution` - speculative query execution policy, possible options:
+ - *NONE* - (default) no speculative execution
+ - *CONSTANT* - speculative execution with fixed delay
+ - *PERCENTILE* - speculative execution with latency percentile threshold, based on recent statistics, cluster wide or per host   
+ 
+`cassandra.constant-execution.constant-delay-millis` - constant execution delay in millis.  
+`cassandra.constant-execution.max-speculative-executions` - cap on total executions for constant strategy.   
 
+`cassandra.percentile-execution.max-speculative-executions` - cap on total executions for percentile strategy.  
+`cassandra.percentile-execution.percentile` - the percentile that a request's latency must fall into to be considered slow.  
+
+`cassandra.percentile-execution.cluster-wide.highest-trackable-latency-ms` - highest latency to be tracked in ms for cluster wide stats.  
+`cassandra.percentile-execution.cluster-wide.interval-ms` - sample interval for cluster wide stats.  
+`cassandra.percentile-execution.cluster-wide.min-recorded-values` - minimum number of recorded values to consider sample for cluster wide stats.  
+`cassandra.percentile-execution.cluster-wide.number-of-significant-value-digits` - number of significant decimal digits to maintain histogram resolution for cluster wide stats.  
+
+`cassandra.percentile-execution.per-host.highest-trackable-latency-ms` - highest latency to be tracked in ms for host stats
+`cassandra.percentile-execution.per-host.interval-ms` - sample interval for host stats.  
+`cassandra.percentile-execution.per-host.min-recorded-values` - minimum number of recorded values to consider sample for host stats.  
+`cassandra.percentile-execution.per-host.number-of-significant-value-digits` - number of significant decimal digits to maintain histogram resolution for host wide stats.  
 
 ### Query options
 
