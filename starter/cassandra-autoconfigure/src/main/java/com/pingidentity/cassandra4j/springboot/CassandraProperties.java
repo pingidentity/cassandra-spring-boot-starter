@@ -29,8 +29,6 @@ public class CassandraProperties
     public enum LoadBalancingPolicies { DC_AWARE, ROUND_ROBIN }
     public enum RetryPolicies { DEFAULT, FALLTHROUGH }
     public enum ReconnectionPolicies { CONSTANT, EXPONENTIAL }
-
-    //NEW
     public enum AddressTranslator { IDENTITY, EC2 }
     public enum TimestampGenerator { SERVER_SIDE, ATOMIC, THREAD_LOCAL }
     public enum SpeculativeExecution { NONE, CONSTANT, PERCENTILE}
@@ -40,8 +38,6 @@ public class CassandraProperties
     private String[] contactPoints;
     private Integer port;
     private Integer protocolVersion;
-
-    //NEW
     private boolean allowBetaProtocolVersion;
     private boolean ssl;
     private boolean noCompact;
@@ -53,7 +49,6 @@ public class CassandraProperties
     private SpeculativeExecution speculativeExecution;
     private ConstantExecution constantExecution;
     private PercentileExecution percentileExecution;
-
     private ProtocolOptions.Compression compression;
     private Auth auth;
     private LoadBalancingPolicies loadBalancingPolicy;
@@ -126,8 +121,6 @@ public class CassandraProperties
         private ConsistencyLevel consistencyLevel;
         private ConsistencyLevel serialConsistencyLevel;
         private Integer fetchSize;
-
-        //new
         private Boolean defaultIdempotence;
         private Boolean prepareOnAllHosts;
         private Boolean reprepareOnUp;

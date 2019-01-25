@@ -193,12 +193,25 @@ Please see Customizing section if you want to use custom `AuthProvider`.
 `cassandra.percentile-execution.cluster-wide.min-recorded-values` - minimum number of recorded values to consider sample for cluster wide stats.  
 `cassandra.percentile-execution.cluster-wide.number-of-significant-value-digits` - number of significant decimal digits to maintain histogram resolution for cluster wide stats.  
 
-`cassandra.percentile-execution.per-host.highest-trackable-latency-ms` - highest latency to be tracked in ms for host stats
+`cassandra.percentile-execution.per-host.highest-trackable-latency-ms` - highest latency to be tracked in ms for host stats.  
 `cassandra.percentile-execution.per-host.interval-ms` - sample interval for host stats.  
 `cassandra.percentile-execution.per-host.min-recorded-values` - minimum number of recorded values to consider sample for host stats.  
 `cassandra.percentile-execution.per-host.number-of-significant-value-digits` - number of significant decimal digits to maintain histogram resolution for host wide stats.  
 
 ### Query options
+`cassandra.query.consistency-level` - default consistentcy level for queries.  
+`cassandra.query.fetch-size` - default fetch size for SELECT queries.  
+`cassandra.query.serial-consistency-level` - default serial consistency level to use for queries.  
+`cassandra.query.default-idempotence` - default idempotence for queries.  
+`cassandra.query.prepare-on-all-hosts` - whether the driver should prepare statements on all hosts in the cluster.  
+`cassandra.query.reprepare-on-up` - whether the driver should re-prepare all cached prepared statements on a host when it's back up.  
+`cassandra.query.metadata-enabled` - whether client-side token and schema metadata.  
+`cassandra.query.refresh-schema-interval-ms` - default schema refresh interval in ms.  
+`cassandra.query.max-pending-refresh-schema-requests` - cap schema refresh requests for control connection.  
+`cassandra.query.refresh-node-list-interval-ms` - default node list refresh interval in ms.  
+`cassandra.query.max-pending-refresh-node-list-requests` - cap node list refresh requests for control connection.  
+`cassandra.query.refresh-node-interval-ms` - default node refresh interval in ms.  
+`cassandra.query.max-pending-refresh-node-requests` - cap node refresh requests for control connection.  
 
 ### Metrics options
 `cassandra.metrics-enabled` - enables/disables metrics collection for cluster, enabled by default.  
