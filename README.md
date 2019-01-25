@@ -47,7 +47,7 @@ Auto configration makes following beans avaliable for autowiring anywhere:
 - `mappingManager` (com.datastax.driver.mapping.MappingManager), object mapper associated with session.
 
 ## Auto-binding of mappers & accessors
-Cassandra auto configuration provides special support for datastax ObjectMapper.
+Cassandra auto configuration provides special support for datastax object mapper.
 When enabled it can discover and automatically register bean mappers and accessors with spring context.
 
 First, let configuration know where your pojo and accessors resides: 
@@ -94,7 +94,7 @@ Automatically enabled when spring-boot-starter-actuator dependency is present. C
 If you need more control over ssl engine please refer to [Customization section](#customizing).  
 `cassandra.no-compact` - enables `NO_COMPACT` option.   
 `cassandra.max-schema-agreement-wait-seconds` - maximum time to wait for schema agreement before returning from a DDL query in seconds.  
-`cassandra.address-translator` - address translator, supported options: *IDENTITY* (default) | *EC2* (`EC2MultiRegionAddressTranslator`)
+`cassandra.address-translator` - address translator, supported options: *IDENTITY* (default) | *EC2* (EC2MultiRegionAddressTranslator)
 
 ### Socket options
 `cassandra.socket.connect-timeout` - connection timeout in ms.  
@@ -156,7 +156,6 @@ Please see Customizing section if you want to use custom `AuthProvider`.
 `cassandra.retry.policy` - retry policy, supported options: *DEFAULT* | *FALLTHROUGH*. 
 `cassandra.retry.logging-enabled` - enable retry decision logging. 
 
-
 ### Reconnection options
 `cassandra.reconnection.policy` - reconnection policy, supported options *CONSTANT* | *EXPONENTIAL*.  
 
@@ -166,6 +165,17 @@ Please see Customizing section if you want to use custom `AuthProvider`.
 `cassandra.reconnection.exponential-max-delay` - max delay in ms for *EXPONENTIAL* policy.  
 
 ### Timestamp generation options
+`cassandra.timestamp-generator` - client-side generator that will produce the timestamp sent with each query: 
+ - *ATOMIC* - (default) monotonically increasing timestamps among all client threads
+ - *THREAD_LOCAL* - monotonically increasing timestamps on per thread basis
+ - *SERVER_SIDE* - let cassandra node assign server-sde timestamp. 
+
+`cassandra.atomic.warning-interval-sec` - how often drift warning logged in seconds for *ATOMIC* generator.  
+`cassandra.atomic.warning-threshold-sec` - timestamps drift allowed before a warning in seconds for *ATOMIC* generator.  
+
+`cassandra.thread-local.warning-interval-sec` - how often drift warning logged in seconds for *THREAD_LOCAL* generator.  
+`cassandra.thread-local.warning-threshold-sec` - timestamps drift allowed before a warning in seconds for *THREAD_LOCAL* generator.  
+
 ### Speculative execution options
 
 
