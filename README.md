@@ -92,8 +92,9 @@ Automatically enabled when spring-boot-starter-actuator dependency is present. C
 `cassandra.allow-beta-protocol-version` - use latest development protocol version.     
 `cassandra.ssl` - when set to `true` will enable ssl for connection, using JDK-based  implementation with the default options. 
 If you need more control over ssl engine please refer to [Customization section](#customizing).  
-`cassandra.no-compact` - enables `NO_COMPACT` option. 
+`cassandra.no-compact` - enables `NO_COMPACT` option.   
 `cassandra.max-schema-agreement-wait-seconds` - maximum time to wait for schema agreement before returning from a DDL query in seconds.  
+`cassandra.address-translator` - address translator, supported options: *IDENTITY* (default) | *EC2* (`EC2MultiRegionAddressTranslator`)
 
 ### Socket options
 `cassandra.socket.connect-timeout` - connection timeout in ms.  
@@ -163,6 +164,9 @@ Please see Customizing section if you want to use custom `AuthProvider`.
 
 `cassandra.reconnection.exponential-base-delay` - base delay in ms for *EXPONENTIAL* policy.  
 `cassandra.reconnection.exponential-max-delay` - max delay in ms for *EXPONENTIAL* policy.  
+
+### Timestamp generation options
+### Speculative execution options
 
 
 ### Query options
