@@ -89,11 +89,11 @@ Automatically enabled when spring-boot-starter-actuator dependency is present. C
 `cassandra.cluster-name` -  Optional name of the cluster.  
 `cassandra.port` - Port to connect to (9042 if ommited).   
 `cassandra.protocol-version` - Native protocol version to use (1 to 5) (auto discovery will be used when ommited).  
-`cassandra.allow-beta-protocol-version` - use latest development protocol version 
+`cassandra.allow-beta-protocol-version` - use latest development protocol version.     
 `cassandra.ssl` - when set to `true` will enable ssl for connection, using JDK-based  implementation with the default options. 
-If you need more control over ssl engine please refer to [Customization section](#customizing).
+If you need more control over ssl engine please refer to [Customization section](#customizing).  
 `cassandra.no-compact` - enables `NO_COMPACT` option. 
-`cassandra.max-schema-agreement-wait-seconds` - maximum time to wait for schema agreement before returning from a DDL query in seconds.
+`cassandra.max-schema-agreement-wait-seconds` - maximum time to wait for schema agreement before returning from a DDL query in seconds.  
 
 ### Socket options
 `cassandra.socket.connect-timeout` - connection timeout in ms.  
