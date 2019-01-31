@@ -33,24 +33,79 @@ public class CassandraProperties
     public enum TimestampGenerator { SERVER_SIDE, ATOMIC, THREAD_LOCAL }
     public enum SpeculativeExecution { NONE, CONSTANT, PERCENTILE}
 
+    /**
+     * Name of cluster
+     */
     private String clusterName;
+
+    /**
+     * Keyspace name
+     */
     private String keyspaceName;
+
+    /**
+     *  List of cluster contact points, comma separated
+     */
     private String[] contactPoints;
+
+    /**
+     * Port to connect to, 9042 if omitted.
+     */
     private Integer port;
+
+    /**
+     * Native protocol version to use (1 to 5)
+     */
     private Integer protocolVersion;
+
+    /**
+     * Use latest development protocol version
+     */
     private boolean allowBetaProtocolVersion;
+
+    /**
+     * Enable ssl for connection
+     */
     private boolean ssl;
+
+    /**
+     * Enable 'NO_COMPACT' option
+     */
     private boolean noCompact;
+
+    /**
+     * Max timeout for schema agreement, seconds
+     */
     private Integer maxSchemaAgreementWaitSeconds;
+
+    /**
+     * Client-side timestamp generator strategy
+     */
     private TimestampGenerator timestampGenerator;
     private Generator atomic;
     private Generator threadLocal;
+
+    /**
+     * Address translator
+     */
     private AddressTranslator addressTranslator;
+
+    /**
+     * Speculative query execution policy
+     */
     private SpeculativeExecution speculativeExecution;
     private ConstantExecution constantExecution;
     private PercentileExecution percentileExecution;
+
+    /**
+     * Transport compression.
+     */
     private ProtocolOptions.Compression compression;
     private Auth auth;
+
+    /**
+     * Load-balancing strategy.
+     */
     private LoadBalancingPolicies loadBalancingPolicy;
     private DcAwarePolicy dcaware;
     private LatencyAwarePolicy latencyaware;
@@ -60,13 +115,32 @@ public class CassandraProperties
     private RetryPolicyOptions retry;
     private ReconnectionPolicyOptions reconnection;
     private QueryPolicyOptions query;
+
+    /**
+     * Metrics collection for cluster
+     */
     private boolean metricsEnabled=true;
+
+    /**
+     * Metrics reporting over JMX
+     */
     private boolean jmxReportingEnabled=true;
+
+    /**
+     * Packages to scan for mappers and accessors, comma separated.
+     */
     private String scanPackages;
 
     public static class Generator
     {
+        /**
+         * Timestamps drift before a warning, seconds
+         */
         private  long warningThresholdSec;
+
+        /**
+         * Drift warning interval, seconds
+         */
         private long warningIntervalSec;
 
         public long getWarningThresholdSec()
@@ -92,7 +166,14 @@ public class CassandraProperties
 
     public static class Auth
     {
+        /**
+         * Username to connect to cassandra cluster.
+         */
         private String username;
+
+        /**
+         * Password to connect to cassandra cluster.
+         */
         private String password;
 
         public String getUsername()
@@ -118,18 +199,69 @@ public class CassandraProperties
 
     public static class QueryPolicyOptions
     {
+        /**
+         * Default consistency level
+         */
         private ConsistencyLevel consistencyLevel;
+
+        /**
+         * Default serial consistency level
+         */
         private ConsistencyLevel serialConsistencyLevel;
+
+        /**
+         * Default fetch size for SELECT queries
+         */
         private Integer fetchSize;
+
+        /**
+         * Default idempotence.
+         */
         private Boolean defaultIdempotence;
+
+        /**
+         * Prepare statements on all hosts in the cluster
+         */
         private Boolean prepareOnAllHosts;
+
+        /**
+         * Re-prepare all cached prepared statements on node restart
+         */
         private Boolean reprepareOnUp;
+
+        /**
+         * Client-side token and schema metadata
+         */
         private Boolean metadataEnabled;
+
+        /**
+         * Default schema refresh interval, ms
+         */
         private Integer refreshSchemaIntervalMs;
+
+        /**
+         * Max schema refresh requests for control connection
+         */
         private Integer maxPendingRefreshSchemaRequests;
+
+        /**
+         * Default node list refresh interval, ms
+         */
         private Integer refreshNodeListIntervalMs;
+
+        /**
+         * Max node list refresh requests for control connection
+         */
         private Integer maxPendingRefreshNodeListRequests;
+
+        /**
+         * Default node refresh interval, ms
+         */
         private Integer refreshNodeIntervalMs;
+
+        /**
+         * Max node refresh requests for control connection
+         */
         private Integer maxPendingRefreshNodeRequests;
 
         public ConsistencyLevel getConsistencyLevel()
@@ -265,9 +397,24 @@ public class CassandraProperties
 
     public static class ReconnectionPolicyOptions
     {
+        /**
+         * Reconnection strategy.
+         */
         private ReconnectionPolicies policy;
+
+        /**
+         * Constant delay between reconnection attempts, ms
+         */
         private long constantDelay;
+
+        /**
+         * Exponential delay base, ms
+         */
         private long exponentialBaseDelay;
+
+        /**
+         * Exponential delay max, ms
+         */
         private long exponentialMaxDelay;
 
         public ReconnectionPolicies getPolicy()
@@ -313,7 +460,14 @@ public class CassandraProperties
 
     public static class RetryPolicyOptions
     {
+        /**
+         * Retry decisions logging.
+         */
         private boolean loggingEnabled;
+
+        /**
+         * Retry strategy.
+         */
         private RetryPolicies policy;
 
         public boolean isLoggingEnabled()
@@ -339,9 +493,21 @@ public class CassandraProperties
 
     public static class PoolOptions
     {
+        /**
+         * Heartbeat interval, seconds.
+         */
         private int heartbeatIntervalSeconds;
+
+        /**
+         * Idle connection timeout, seconds.
+         */
         private int idleTimeoutSeconds;
+
+        /**
+         * Pool connection acquiring timeout, ms.
+         */
         private int poolTimeoutMillis;
+
         private PoolConfig local;
         private PoolConfig remote;
 
@@ -397,9 +563,24 @@ public class CassandraProperties
 
         public static class PoolConfig
         {
+            /**
+             * Initial number of connections to each host
+             */
             private int coreConnectionsPerHost;
+
+            /**
+             * Max number of connections to each host
+             */
             private int maxConnectionsPerHost;
+
+            /**
+             * Max number of requests for each connection
+             */
             private int maxRequestsPerConnection;
+
+            /**
+             * Threshold to trigger new connection to host
+             */
             private int newConnectionThreshold;
 
             public int getCoreConnectionsPerHost()
@@ -442,19 +623,48 @@ public class CassandraProperties
                 this.newConnectionThreshold = newConnectionThreshold;
             }
         }
-
-
     }
 
     public static class SocketOptions
     {
+        /**
+         * Connection timeout, ms
+         */
         private int connectTimeout;
+
+        /**
+         * Per host read timeout, ms
+         */
         private int readTimeout;
+
+        /**
+         * TCP connection keep alive
+         */
         private boolean keepAlive;
+
+        /**
+         * Enable address reuse
+         */
         private boolean reuseAddress;
+
+        /**
+         * linger-on-close timeout
+         */
         private int soLinger;
+
+        /**
+         * TCP no delay
+         */
         private boolean tcpNoDelay;
+
+        /**
+         * Incoming network IO buffer, bytes
+         */
         private int receiveBufferSize;
+
+        /**
+         * Outgoing network IO buffer, bytes
+         */
         private int sendBufferSize;
 
         public int getConnectTimeout()
@@ -540,7 +750,14 @@ public class CassandraProperties
 
     public static class ConstantExecution
     {
+        /**
+         * constant execution delay in millis
+         */
         private long constantDelayMillis;
+
+        /**
+         * cap on total executions using constant strategy
+         */
         private int maxSpeculativeExecutions;
 
         public long getConstantDelayMillis()
@@ -566,7 +783,14 @@ public class CassandraProperties
 
     public static class PercentileExecution
     {
+        /**
+         * the percentile that a request's latency must fall into to be considered slow.
+         */
         private double percentile;
+
+        /**
+         * Cap on total executions for percentile strategy
+         */
         private int maxSpeculativeExecutions;
         private PrecentileTracker clusterWide;
         private PrecentileTracker perHost;
@@ -614,9 +838,24 @@ public class CassandraProperties
 
     public static class PrecentileTracker
     {
+        /**
+         *  Highest latency to be tracked in ms
+         */
         private long highestTrackableLatencyMs;
+
+        /**
+         * number of significant decimal digits for histogram resolution
+         */
         private int numberOfSignificantValueDigits;
+
+        /**
+         * Minimal number of records per sample
+         */
         private int minRecordedValues;
+
+        /**
+         * Sample interval, ms
+         */
         private long intervalMs;
 
         public long getHighestTrackableLatencyMs()
@@ -662,8 +901,19 @@ public class CassandraProperties
 
     public static class DcAwarePolicy
     {
+        /**
+         * Name of the "local" data center
+         */
         private String localDc;
+
+        /**
+         * Number of hosts per remote data center to consider
+         */
         private int usedHostsPerRemoteDc;
+
+        /**
+         * Return remote hosts for query plans with LOCAL levels
+         */
         private boolean allowRemoteDcsForLocalConsistencyLevel;
 
         public String getLocalDc()
@@ -699,7 +949,14 @@ public class CassandraProperties
 
     public static class TokenAwarePolicy
     {
+        /**
+         * Token awareness for load balancing policy
+         */
         private boolean enabled;
+
+        /**
+         * Replica ordering
+         */
         private ReplicaOrdering replicaOrdering = ReplicaOrdering.RANDOM;
 
         public boolean isEnabled()
@@ -725,10 +982,29 @@ public class CassandraProperties
 
     public static class LatencyAwarePolicy
     {
+        /**
+         * Exclusion threshold
+         */
         private double exclusionThreshold;
+
+        /**
+         * Minimum number of measurements to consider, per host
+         */
         private int minimumMeasurements;
+
+        /**
+         * Retry period, ms
+         */
         private long retryPeriod;
+
+        /**
+         * Scale, ms
+         */
         private long scale;
+
+        /**
+         * Update rate, ms
+         */
         private long updateRate;
 
         public double getExclusionThreshold()
