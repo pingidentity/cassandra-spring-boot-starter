@@ -205,7 +205,7 @@ Please see Customizing section if you want to use custom `AuthProvider`.
 `cassandra.query.default-idempotence` - default idempotence for queries.  
 `cassandra.query.prepare-on-all-hosts` - whether the driver should prepare statements on all hosts in the cluster.  
 `cassandra.query.reprepare-on-up` - whether the driver should re-prepare all cached prepared statements on a host when it's back up.  
-`cassandra.query.metadata-enabled` - whether client-side token and schema metadata.  
+`cassandra.query.metadata-enabled` - whether client-side token and schema metadata enabled.  
 `cassandra.query.refresh-schema-interval-ms` - default schema refresh interval in ms.  
 `cassandra.query.max-pending-refresh-schema-requests` - cap schema refresh requests for control connection.  
 `cassandra.query.refresh-node-list-interval-ms` - default node list refresh interval in ms.  

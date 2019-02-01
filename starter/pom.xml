@@ -19,4 +19,32 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
+    
+    <scm>
+        <connection>scm:git:https://github.com/pingidentity/cassandra-spring-boot-starter.git</connection>
+        <url>https://github.com/pingidentity/cassandra-spring-boot-starter</url>
+    </scm>
+    
+    <distributionmanagement>
+        <site>
+            <id>sdk</id>
+            <url>https://github.com/pingidentity/cassandra-spring-boot-starter</url>
+        </site>
+        <snapshotrepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotrepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionmanagement>
+
+    <developers>
+        <developer>
+            <name>Dmitry Vsekhvalnov</name>
+            <email>dvsekhvalnov@pingidentity.com</email>
+            <organizationurl>http://pingidentity.com</organizationurl>
+        </developer>
+    </developers>   
 </project>
