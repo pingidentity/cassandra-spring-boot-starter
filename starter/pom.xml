@@ -25,31 +25,29 @@
         <url>https://github.com/pingidentity/cassandra-spring-boot-starter</url>
     </scm>
     
-    <distributionmanagement>
+    <distributionManagement>
         <site>
             <id>sdk</id>
             <url>https://github.com/pingidentity/cassandra-spring-boot-starter</url>
         </site>
-        <snapshotrepository>
+        <snapshotRepository>
             <id>ossrh</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotrepository>
+        </snapshotRepository>
         <repository>
             <id>ossrh</id>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
-    </distributionmanagement>
+    </distributionManagement>
 
     <developers>
         <developer>
             <name>Dmitry Vsekhvalnov</name>
             <email>dvsekhvalnov@pingidentity.com</email>
-            <organizationurl>http://pingidentity.com</organizationurl>
+            <organizationUrl>http://pingidentity.com</organizationUrl>
         </developer>
     </developers>   
-    
-    
-    
+        
     <profiles>
       <profile>
           <id>release</id>
@@ -63,8 +61,8 @@
               <plugins>
                   <!-- TODO: 
                       <plugin>
-                      <groupid>org.sonatype.plugins</groupid>
-                      <artifactid>nexus-staging-maven-plugin</artifactid>
+                      <groupId>org.sonatype.plugins</groupId>
+                      <artifactId>nexus-staging-maven-plugin</artifactId>
                       <version>1.6.8</version>
                       <extensions>true</extensions>
                       <configuration>
@@ -74,8 +72,8 @@
                       </configuration>
                   </plugin> -->
                   <plugin>
-                      <groupid>org.apache.maven.plugins</groupid>
-                      <artifactid>maven-source-plugin</artifactid>
+                      <groupId>org.apache.maven.plugins</groupId>
+                      <artifactId>maven-source-plugin</artifactId>
                       <version>3.0.1</version>
                       <executions>
                           <execution>
@@ -87,8 +85,8 @@
                       </executions>
                   </plugin>
                   <plugin>
-                      <groupid>org.apache.maven.plugins</groupid>
-                      <artifactid>maven-javadoc-plugin</artifactid>
+                      <groupId>org.apache.maven.plugins</groupId>
+                      <artifactId>maven-javadoc-plugin</artifactId>
                       <version>3.0.1</version>
                       <executions>
                           <execution>
@@ -102,8 +100,8 @@
 
                   <!-- TODO: To sign the artifacts -->
                   <!-- <plugin>
-                      <groupid>org.apache.maven.plugins</groupid>
-                      <artifactid>maven-gpg-plugin</artifactid>
+                      <groupId>org.apache.maven.plugins</groupId>
+                      <artifactId>maven-gpg-plugin</artifactId>
                       <version>1.6</version>
                       <executions>
                           <execution>
