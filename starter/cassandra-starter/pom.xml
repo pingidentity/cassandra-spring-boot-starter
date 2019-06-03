@@ -44,14 +44,14 @@
 
     <organization>
         <name>Ping Identity</name>
-        <url>http://pingidentity.com</url>
+        <url>https://pingidentity.com</url>
     </organization>
 
     <developers>
         <developer>
             <name>Dmitry Vsekhvalnov</name>
             <email>dvsekhvalnov@pingidentity.com</email>
-            <organizationUrl>http://pingidentity.com</organizationUrl>
+            <organizationUrl>https://pingidentity.com</organizationUrl>
         </developer>
     </developers>
 
