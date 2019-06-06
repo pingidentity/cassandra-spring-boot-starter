@@ -134,8 +134,7 @@
 
             <build>
                 <plugins>
-                    <!-- TODO:
-                        <plugin>
+                    <!-- <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
                         <version>1.6.8</version>
@@ -145,11 +144,11 @@
                             <nexusurl>https://oss.sonatype.org/</nexusurl>
                             <autoreleaseafterclose>true</autoreleaseafterclose>
                         </configuration>
-                    </plugin> -->
+                    </plugin>  -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>3.0.1</version>
+                        <version>3.1.0</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
@@ -162,7 +161,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.0.1</version>
+                        <version>3.1.0</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
@@ -173,8 +172,7 @@
                         </executions>
                     </plugin>
 
-                    <!-- TODO: To sign the artifacts -->
-                    <!-- <plugin>
+                    <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
                         <version>1.6</version>
@@ -187,7 +185,7 @@
                                 </goals>
                             </execution>
                         </executions>
-                    </plugin> -->
+                    </plugin>
                 </plugins>
             </build>
         </profile>

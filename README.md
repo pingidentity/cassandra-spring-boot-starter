@@ -15,7 +15,7 @@ Reference library from maven central:
 ```xml
 <dependency>
     <groupId>com.pingidentity.oss.cassandra4j</groupId>
-    <artifactId>spring-boot-cassandra-auto-configuration</artifactId>
+    <artifactId>spring-boot-cassandra-starter</artifactId>
     <version>2.1.0</version>
 </dependency>
 ```
