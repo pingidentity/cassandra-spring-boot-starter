@@ -9,6 +9,15 @@
     <description>Cassandra auto configuration</description>
     <url>https://github.com/pingidentity/cassandra-spring-boot-starter</url>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <maven.deploy.skip>false</maven.deploy.skip>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
@@ -54,14 +63,6 @@
             <organizationUrl>https://pingidentity.com</organizationUrl>
         </developer>
     </developers>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
 
     <dependencies>
         <dependency>
@@ -134,7 +135,7 @@
 
             <build>
                 <plugins>
-                    <!-- <plugin>
+                    <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
                         <version>1.6.8</version>
@@ -144,7 +145,7 @@
                             <nexusurl>https://oss.sonatype.org/</nexusurl>
                             <autoreleaseafterclose>true</autoreleaseafterclose>
                         </configuration>
-                    </plugin>  -->
+                    </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>

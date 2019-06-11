@@ -9,6 +9,12 @@
     <description>Starter for using pure cassandra driver</description>
     <url>https://github.com/pingidentity/cassandra-spring-boot-starter</url>
 
+    <properties>
+        <maven.deploy.skip>false</maven.deploy.skip>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
@@ -54,11 +60,6 @@
             <organizationUrl>https://pingidentity.com</organizationUrl>
         </developer>
     </developers>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    </properties>
 
     <dependencies>
         <dependency>
@@ -133,8 +134,7 @@
 
             <build>
                 <plugins>
-                    <!-- TODO:
-                        <plugin>
+                    <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
                         <version>1.6.8</version>
@@ -144,7 +144,7 @@
                             <nexusurl>https://oss.sonatype.org/</nexusurl>
                             <autoreleaseafterclose>true</autoreleaseafterclose>
                         </configuration>
-                    </plugin> -->
+                    </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>

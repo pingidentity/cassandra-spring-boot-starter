@@ -7,6 +7,10 @@
     <packaging>pom</packaging>
     <name>Spring Boot Cassandra</name>
 
+	<properties>
+	  <maven.deploy.skip>true</maven.deploy.skip>
+	</properties>
+
     <modules>
         <module>cassandra-autoconfigure</module>
         <module>cassandra-starter</module>
