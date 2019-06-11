@@ -7,9 +7,14 @@
     <packaging>pom</packaging>
     <name>Spring Boot Cassandra</name>
 
-	<properties>
-	  <maven.deploy.skip>true</maven.deploy.skip>
-	</properties>
+    <properties>
+      <maven.deploy.skip>true</maven.deploy.skip>
+    </properties>
+
+    <scm>
+        <connection>scm:git:https://github.com/pingidentity/cassandra-spring-boot-starter.git</connection>
+        <url>https://github.com/pingidentity/cassandra-spring-boot-starter</url>
+    </scm>
 
     <modules>
         <module>cassandra-autoconfigure</module>
