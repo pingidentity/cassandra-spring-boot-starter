@@ -135,6 +135,13 @@
                   <autoVersionSubmodules>true</autoVersionSubmodules>
                   <releaseProfiles>release</releaseProfiles>
                </configuration>
+               <dependencies>
+                   <dependency>
+                       <groupId>org.apachemaven.scm</groupId>
+                       <artifactId>maven-scm-provider-gitexe</artifactId>
+                       <version>1.9.4</version>
+                   </dependency>
+               </dependencies>
             </plugin>
         </plugins>
     </build>
