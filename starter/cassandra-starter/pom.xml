@@ -67,7 +67,7 @@
             <artifactId>spring-boot-cassandra-autoconfigure</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.datastax.cassandra</groupId>
             <artifactId>cassandra-driver-core</artifactId>
@@ -122,6 +122,21 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+    <build>
+        <plugins>
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-release-plugin</artifactId>
+               <version>2.5.3</version>
+               <configuration>
+                  <tagNameFormat>v@{project.version}</tagNameFormat>
+                  <autoVersionSubmodules>true</autoVersionSubmodules>
+                  <releaseProfiles>release</releaseProfiles>
+               </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 
     <profiles>
         <profile>
@@ -144,6 +159,15 @@
                             <nexusurl>https://oss.sonatype.org/</nexusurl>
                             <autoreleaseafterclose>true</autoreleaseafterclose>
                         </configuration>
+                        <executions>
+                          <execution>
+                             <id>default-deploy</id>
+                             <phase>deploy</phase>
+                             <goals>
+                                <goal>deploy</goal>
+                             </goals>
+                          </execution>
+                       </executions>
                     </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
